@@ -1,0 +1,34 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+enum Status {
+  open
+  in_service
+  pause
+  finished
+}
+
+enum Role {
+  admin
+  user
+}
+
+model User {
+  id               String           @id @default(uuid()) @map("_id")
+  first_name       String           @map("first_name")
+  last_name        String           @map("last_name")
+  email            String           @unique @map("email")
+  password         String           @map("password")
+  role             Role             @default(user) @map("role")
+  terms_of_service Boolean          @default(false) @map("terms_of_service")
+  phone            String?          @map("phone")
+  salt             String?          @map("salt")
+  profile_picture  String?          @map("profile_picture")
+  created_at       DateTime?        @default(now()) @map("created_at")
+}
