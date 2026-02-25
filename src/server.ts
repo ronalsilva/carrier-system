@@ -8,8 +8,8 @@ import fastify, { FastifyInstance, FastifyPluginAsync, FastifyReply, FastifyRequ
 import cors from "@fastify/cors"
 import fastifySwagger from "@fastify/swagger";
 import fastifySwaggerUi from "@fastify/swagger-ui";
-import {swaggerOptions} from "@utils/swaggerConfig"
 import fjwt, { JWT } from "@fastify/jwt";
+import { swaggerOptions } from "./utils/swaggerConfig";
 
 env.config();
 
@@ -35,7 +35,7 @@ export default async function buildServer(): Promise<FastifyInstance> {
         ],
         methods: ["GET", "PUT", "POST", "DELETE"],
     })
-    await server.register(fastifySwagger, swaggerOptions)
+    await server.register(fastifySwagger, swaggerOptions);
     await server.register(fastifySwaggerUi, {
         routePrefix: '/docs',
         uiConfig: {
