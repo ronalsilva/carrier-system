@@ -24,7 +24,7 @@
 				"database/*"
 			],
 			"@modules/*": [
-				"modules/*"
+				"src/test/modules/*"
 			],
 			"@schemas/*": [
 				"schemas/*"
