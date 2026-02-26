@@ -18,6 +18,19 @@ module.exports = {
 	testEnvironment: 'node',
 	testPathIgnorePatterns: ['/node_modules/', '/prisma/'],
 	coveragePathIgnorePatterns: ['/src/utils/', '/src/test/'],
+	collectCoverageFrom: [
+		'src/modules/**/*.ts',
+		'!src/modules/**/*.schemas.ts',
+		'!src/modules/**/*.routes.ts',
+	],
+	coverageThreshold: {
+		global: {
+			statements: 70,
+			branches: 70,
+			functions: 70,
+			lines: 70,
+		},
+	},
 	moduleFileExtensions: [
 		'ts',
 		'tsx',
