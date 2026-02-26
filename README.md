@@ -107,8 +107,11 @@ carrier-system/
    ```bash
    npm run docker
    ```
+   This starts all services in Docker, frontend, backend, and the database.
 
-The project is already up and running.
+- **Frontend:** http://localhost:3000
+- **API:** http://localhost:3002
+- **Swagger:** http://localhost:3002/docs
 
 ## Configuration manually
 
@@ -124,27 +127,13 @@ The project is already up and running.
      - `JWT_SECRET` – Secret for JWT tokens
      - `PORT` – API port (default: 3002)
 
-3. **Start MongoDB (Docker):**
+3. **Docker:**
    ```bash
    npm run docker
    ```
-   Runs MongoDB 7 with replica set (required by Prisma).
+  This starts all services in Docker, frontend, backend, and the database.
 
-4. **Database setup:**
-   ```bash
-   npm run db
-   ```
-   Pushes the Prisma schema and generates the client.
-
-## Development
-
-Run API and frontend in parallel:
-
-```bash
-npm run dev
-```
-
-Or use VS Code debug (F5) with the configured launch profile.
+> * Stop the app-1 and frontend services in Docker and select “Debug API + Web” in debug mode.
 
 - **Frontend:** http://localhost:3000
 - **API:** http://localhost:3002
@@ -161,12 +150,16 @@ Next.js proxies `/api/*` requests to the API on port 3002.
 | `npm run dev:web` | Frontend only |
 | `npm run build` | Build API and frontend |
 | `npm run start` | Start API + frontend (production) |
+| `npm run start:api` | API only (production) |
+| `npm run start:web` | Frontend only (production) |
 | `npm run test` | Run API unit tests |
 | `npm run lint` | Run ESLint on frontend |
 | `npm run db` | Push schema + generate Prisma client |
 | `npm run db:generate` | Generate Prisma client only |
 | `npm run db:push` | Push schema to database only |
-| `npm run docker` | Start MongoDB via Docker Compose |
+| `npm run docker` | Start all services via Docker Compose |
+| `npm run docker:build` | Start all services with rebuild |
+| `npm run docker:db` | Start only MongoDB (for local debug) |
 
 ## Production
 
