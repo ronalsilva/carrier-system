@@ -11,7 +11,7 @@ import fastifySwaggerUi from "@fastify/swagger-ui";
 import fjwt, { JWT } from "@fastify/jwt";
 import { swaggerOptions } from "./utils/swaggerConfig";
 
-env.config();
+env.config({ override: false });
 
 declare module "fastify" {
     interface FastifyRequest {
@@ -78,7 +78,8 @@ export default async function buildServer(): Promise<FastifyInstance> {
 			continue;
 		}
 		
-		const routesFileName = `${module}.routes.ts`;
+		const ext = path.extname(fileURLToPath(import.meta.url));
+		const routesFileName = `${module}.routes${ext}`;
 		const routesFilePath = path.join(modulePath, routesFileName);
 	
 		if (!fs.existsSync(routesFilePath)) {

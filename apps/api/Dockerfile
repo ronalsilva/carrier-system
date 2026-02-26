@@ -1,0 +1,38 @@
+FROM node:22-alpine AS base
+
+# Install dependencies
+FROM base AS deps
+WORKDIR /app
+COPY package.json package-lock.json* ./
+COPY apps/api/package.json ./apps/api/
+COPY apps/web/package.json ./apps/web/
+RUN npm ci
+
+# Build
+FROM base AS builder
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
+COPY --from=deps /app/package-lock.json ./
+COPY package.json ./
+COPY apps/api ./apps/api
+WORKDIR /app/apps/api
+RUN npx prisma generate
+RUN npm run build
+
+# Production
+FROM base AS runner
+WORKDIR /app/api
+ENV NODE_ENV=production
+COPY --from=builder /app/apps/api/dist ./dist
+COPY --from=builder /app/apps/api/src ./src
+COPY --from=builder /app/apps/api/tsconfig.json ./
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/apps/api/prisma ./prisma
+COPY --from=builder /app/apps/api/package.json ./
+COPY docker-entrypoint.sh /docker-entrypoint.sh
+RUN chmod +x /docker-entrypoint.sh
+
+EXPOSE 3002
+
+ENTRYPOINT ["/docker-entrypoint.sh"]
+CMD ["node", "--enable-source-maps", "dist/app.js"]

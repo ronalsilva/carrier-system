@@ -18,7 +18,7 @@ import fastifySwagger from "@fastify/swagger";
 import fastifySwaggerUi from "@fastify/swagger-ui";
 import fjwt from "@fastify/jwt";
 import { swaggerOptions } from "./utils/swaggerConfig";
-env.config();
+env.config({ override: false });
 export default function buildServer() {
     return __awaiter(this, void 0, void 0, function* () {
         const server = fastify();
@@ -73,7 +73,8 @@ export default function buildServer() {
             if (!stats.isDirectory()) {
                 continue;
             }
-            const routesFileName = `${module}.routes.ts`;
+            const ext = path.extname(fileURLToPath(import.meta.url));
+            const routesFileName = `${module}.routes${ext}`;
             const routesFilePath = path.join(modulePath, routesFileName);
             if (!fs.existsSync(routesFilePath)) {
                 console.warn(`Warning: ${routesFileName} not found in ${module} module`);

@@ -1,0 +1,10 @@
+# Frontend em Docker + Backend local (Debug API)
+# Uso: docker compose -f docker-compose.yml -f docker-compose.debug-frontend.yml up -d
+# Depois rode "Debug API" no VS Code. O frontend em localhost:3000 vai usar a API local.
+services:
+  app:
+    profiles:
+      - full
+  frontend:
+    environment:
+      API_URL: http://host.docker.internal:3002

@@ -21,7 +21,9 @@
     "db": "npm run db -w @carrier-system/api",
     "db:generate": "npm run db:generate -w @carrier-system/api",
     "db:push": "npm run db:push -w @carrier-system/api",
-    "docker": "docker-compose up -d"
+    "docker": "docker compose up -d",
+    "docker:build": "docker compose up --build",
+    "docker:db": "docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d"
   },
   "devDependencies": {
     "concurrently": "^9.1.0"

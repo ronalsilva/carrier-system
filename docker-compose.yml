@@ -1,15 +1,59 @@
 services:
-  mongo:
+  app:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    ports:
+      - "3002:3002"
+      - "9229:9229"
+    environment:
+      DATABASE_URL: mongodb://db:27017/carriers-db?replicaSet=rs0
+      JWT_SECRET: carriers-api-secret
+      PORT: 3002
+      NODE_OPTIONS: --inspect=0.0.0.0:9229
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3002/docs', (r) => process.exit(r.statusCode === 200 ? 0 : 1)).on('error', () => process.exit(1))"]
+      interval: 5s
+      timeout: 5s
+      retries: 15
+      start_period: 45s
+    restart: unless-stopped
+
+  db:
     image: mongo:7
     command: ["--replSet", "rs0", "--bind_ip_all"]
     ports:
-      - 27017:27017
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
     healthcheck:
       test: [
         "CMD-SHELL",
-        "mongosh --port 27017 --quiet --eval \"try { rs.initiate({_id:'rs0',members:[{_id:0,host:'localhost:27017'}]}) } catch(e) {}; quit(rs.status().ok === 1 ? 0 : 1)\""
+        "mongosh --port 27017 --quiet --eval \"try { rs.initiate({_id:'rs0',members:[{_id:0,host:'db:27017'}]}) } catch(e) {}; quit(rs.status().ok === 1 ? 0 : 1)\""
       ]
       interval: 5s
       timeout: 10s
       retries: 10
       start_period: 15s
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+      args:
+        API_URL: http://app:3002
+    ports:
+      - "3000:3000"
+    environment:
+      API_URL: http://app:3002
+    depends_on:
+      app:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  mongo_data:

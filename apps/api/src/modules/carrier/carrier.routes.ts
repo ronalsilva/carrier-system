@@ -14,6 +14,8 @@ import {
 } from "./carrier.schemas";
 
 async function carrierRoutes(fastify: FastifyInstance) {
+    // I removed the authentication from the API routes for testing purposes. It's still in the Swagger UI.
+    // fastify.post("/ccf/upload", { preHandler: [fastify.authenticate], schema: createCarrierSchema }, createCarrierController);
     fastify.post("/ccf/upload", { schema: createCarrierSchema }, createCarrierController);
     fastify.get("/ccf", { schema: getAllCarriersSchema }, getAllCarriersController);
     fastify.get("/ccf/:carrier_id", { schema: getCarrierSchema }, getCarrierController);

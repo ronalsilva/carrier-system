@@ -12,6 +12,8 @@ Monolith with Fastify API, Prisma ORM, Jest for testing, Next.js frontend, and M
 
 > **⚠️ Prisma version:** This project requires **Prisma 6**. Prisma 7 does not support MongoDB yet, so do not upgrade until MongoDB support is added.
 
+> **⚠️ Authentication:** I removed the `preHandler` from the APIs so authentication is not required, but kept it in Swagger. This is for testing purposes only.
+
 ## Project Structure
 
 ```
@@ -87,7 +89,28 @@ carrier-system/
 - MongoDB (or Docker)
 - npm
 
-## Configuration
+## Configuration automatically
+
+1. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+   
+2. **Environment variables:**
+   - Copy `apps/api/.env.example` to `apps/api/.env`
+   - Configure:
+     - `DATABASE_URL` – MongoDB connection string (default: `mongodb://localhost:27017/carriers-db`)
+     - `JWT_SECRET` – Secret for JWT tokens
+     - `PORT` – API port (default: 3002)
+
+3. **Start MongoDB (Docker):**
+   ```bash
+   npm run docker
+   ```
+
+The project is already up and running.
+
+## Configuration manually
 
 1. **Install dependencies:**
    ```bash
