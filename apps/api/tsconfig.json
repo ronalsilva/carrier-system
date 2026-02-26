@@ -17,7 +17,7 @@
       "@utils/*": ["utils/*"],
       "@api/*": ["api/*"],
       "@db/*": ["database/*"],
-      "@modules/*": ["src/test/modules/*"],
+      "@modules/*": ["modules/*"],
       "@schemas/*": ["schemas/*"]
     }
   },
