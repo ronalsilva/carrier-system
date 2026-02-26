@@ -184,3 +184,7 @@ mongodb://localhost:27017/carriers-db
 ```
 
 You can use tools like TablePlus, MongoDB Compass, or similar to connect to the database.
+
+## Future Improvements
+
+- **Support optional query params** on carrier list: `?limit=N` and `?min_score=N` for pagination and filtering by minimum score.
