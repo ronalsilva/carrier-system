@@ -7,11 +7,16 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum Status {
-  open
-  in_service
-  pause
-  finished
+enum safety_rating {
+  Satisfactory
+  Conditional
+  Unsatisfactory
+}
+
+enum authority_status {
+  Active
+  Inactive
+  Revoked
 }
 
 enum Role {
@@ -31,4 +36,33 @@ model User {
   salt             String?          @map("salt")
   profile_picture  String?          @map("profile_picture")
   created_at       DateTime?        @default(now()) @map("created_at")
+}
+
+model Carrier {
+  id                   String                @id @default(uuid()) @map("_id")
+  carrier_id           String                @unique @map("carrier_id")
+  dot_number           String                @map("dot_number")
+  legal_name           String                @map("legal_name")
+  safety_rating        safety_rating         @map("safety_rating")
+  out_of_service_pct   Int                   @default(0) @map("out_of_service_pct")
+  crash_total          Int                   @default(0) @map("crash_total")
+  driver_oos_pct       Int                   @default(0) @map("driver_oos_pct")
+  insurance_on_file    Boolean               @default(false) @map("insurance_on_file")
+  authority_status     authority_status      @map("authority_status")
+  last_inspection_date String                @map("last_inspection_date")
+  fleet_size           Int?                  @map("fleet_size")
+  score                Int?                  @map("score")
+  content_hash         String?               @map("content_hash")
+  created_at           DateTime?             @default(now()) @map("created_at")
+  score_history        CarrierScoreHistory[]
+}
+
+model CarrierScoreHistory {
+  id          String   @id @default(uuid()) @map("_id")
+  carrier_id  String   @map("carrier_id")
+  carrier     Carrier  @relation(fields: [carrier_id], references: [id], onDelete: Cascade)
+  score       Int      @map("score")
+  recorded_at DateTime @default(now()) @map("recorded_at")
+
+  @@index([carrier_id])
 }
