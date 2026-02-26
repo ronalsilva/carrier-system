@@ -24,7 +24,7 @@
         {
             "label": "build",
             "type": "typescript",
-            "tsconfig": "tsconfig.json",
+            "tsconfig": "apps/api/tsconfig.json",
             "problemMatcher": [
                 "$tsc"
             ],
