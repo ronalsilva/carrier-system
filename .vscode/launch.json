@@ -1,54 +1,84 @@
 {
-	"version": "0.2.0",
-	"configurations": [
-		{
-			"name": "Debug API",
-			"type": "node",
-			"request": "launch",
-			"program": "${workspaceFolder}/apps/api/src/app.ts",
-			"runtimeExecutable": "node",
-			"runtimeArgs": ["--import", "tsx"],
-			"env": { "NODE_ENV": "development" },
-			"console": "integratedTerminal",
-			"internalConsoleOptions": "neverOpen",
-			"skipFiles": ["<node_internals>/**"],
-			"sourceMaps": true,
-			"resolveSourceMapLocations": ["${workspaceFolder}/**", "!**/node_modules/**"],
-			"restart": true,
-			"protocol": "inspector",
-			"cwd": "${workspaceFolder}/apps/api",
-			"outputCapture": "std"
-		},
-		{
-			"name": "Debug Web",
-			"type": "node",
-			"request": "launch",
-			"runtimeExecutable": "npm",
-			"runtimeArgs": ["run", "dev"],
-			"cwd": "${workspaceFolder}/apps/web",
-			"console": "integratedTerminal",
-			"internalConsoleOptions": "neverOpen",
-			"skipFiles": ["<node_internals>/**", "**/node_modules/**"]
-		},
-		{
-			"name": "Debug API (Attach)",
-			"type": "node",
-			"request": "attach",
-			"port": 9229,
-			"restart": true,
-			"localRoot": "${workspaceFolder}",
-			"remoteRoot": "${workspaceFolder}",
-			"protocol": "inspector",
-			"skipFiles": ["<node_internals>/**"],
-			"sourceMaps": true,
-			"resolveSourceMapLocations": ["${workspaceFolder}/**", "!**/node_modules/**"]
-		}
-	],
-	"compounds": [
-		{
-			"name": "Debug API + Web",
-			"configurations": ["Debug API", "Debug Web"],
-			"stopAll": true
-		}
-	]
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug API",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/apps/api/src/app.ts",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["--import", "tsx"],
+      "env": {
+        "NODE_ENV": "development",
+        "DATABASE_URL": "mongodb://localhost:27017/carriers-db?directConnection=true",
+        "JWT_SECRET": "carriers-api-secret",
+        "PORT": "3002"
+      },
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "skipFiles": ["<node_internals>/**"],
+      "sourceMaps": true,
+      "resolveSourceMapLocations": ["${workspaceFolder}/**", "!**/node_modules/**"],
+      "restart": true,
+      "protocol": "inspector",
+      "cwd": "${workspaceFolder}/apps/api",
+      "outputCapture": "std"
+    },
+    {
+      "name": "Debug Web",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/next",
+      "runtimeArgs": ["dev"],
+      "cwd": "${workspaceFolder}/apps/web",
+      "env": {
+        "API_URL": "http://127.0.0.1:3002"
+      },
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "skipFiles": ["<node_internals>/**", "**/node_modules/**"]
+    },
+    {
+      "name": "Debug API (Attach)",
+      "type": "node",
+      "request": "attach",
+      "port": 9229,
+      "restart": true,
+      "localRoot": "${workspaceFolder}",
+      "remoteRoot": "${workspaceFolder}",
+      "protocol": "inspector",
+      "skipFiles": ["<node_internals>/**"],
+      "sourceMaps": true,
+      "resolveSourceMapLocations": ["${workspaceFolder}/**", "!**/node_modules/**"]
+    },
+    {
+      "name": "Debug API (Docker Attach)",
+      "type": "node",
+      "request": "attach",
+      "port": 9229,
+      "address": "localhost",
+      "localRoot": "${workspaceFolder}/apps/api",
+      "remoteRoot": "/app/api",
+      "pathMapping": {
+        "/app/api": "${workspaceFolder}/apps/api",
+        "/app/api/src": "${workspaceFolder}/apps/api/src"
+      },
+      "sourceMapPathOverrides": {
+        "webpack:///./*": "${workspaceFolder}/apps/api/*",
+        "webpack:///src/*": "${workspaceFolder}/apps/api/src/*"
+      },
+      "protocol": "inspector",
+      "skipFiles": ["<node_internals>/**"],
+      "sourceMaps": true,
+      "resolveSourceMapLocations": ["${workspaceFolder}/**", "!**/node_modules/**"],
+      "restart": true
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Debug API + Web",
+      "configurations": ["Debug API", "Debug Web"],
+      "stopAll": true
+    }
+  ]
 }

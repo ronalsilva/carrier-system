@@ -1,0 +1,9 @@
+node_modules
+.next
+.git
+.env*.local
+*.md
+dist
+coverage
+.nyc_output
+*.log

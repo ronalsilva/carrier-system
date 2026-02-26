@@ -21,20 +21,22 @@ export type CarrierScoreHistory = {
   recorded_at: string;
 };
 
+const fetchOpts: RequestInit = { cache: "no-store" };
+
 export async function fetchCarriers(): Promise<Carrier[]> {
-  const res = await fetch(API_BASE);
+  const res = await fetch(API_BASE, fetchOpts);
   if (!res.ok) throw new Error("Failed to fetch carriers");
   return res.json();
 }
 
 export async function fetchCarrierById(carrierId: string): Promise<Carrier | null> {
-  const res = await fetch(`${API_BASE}/${carrierId}`);
+  const res = await fetch(`${API_BASE}/${carrierId}`, fetchOpts);
   if (!res.ok) return null;
   return res.json();
 }
 
 export async function fetchCarrierHistory(carrierId: string): Promise<CarrierScoreHistory[]> {
-  const res = await fetch(`${API_BASE}/${carrierId}/history`);
+  const res = await fetch(`${API_BASE}/${carrierId}/history`, fetchOpts);
   if (!res.ok) return [];
   const data = await res.json();
   return Array.isArray(data) ? data : [];
@@ -42,6 +44,7 @@ export async function fetchCarrierHistory(carrierId: string): Promise<CarrierSco
 
 export async function uploadCCF(carriers: Omit<Carrier, "created_at">[]): Promise<Carrier[]> {
   const res = await fetch(`${API_BASE}/upload`, {
+    ...fetchOpts,
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(carriers),

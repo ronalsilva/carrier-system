@@ -1,0 +1,10 @@
+# Use este arquivo para debug local: suba apenas o MongoDB
+# Uso: docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d
+# Isso inicia apenas o db. Depois rode "Debug API + Web" no VS Code.
+services:
+  app:
+    profiles:
+      - full
+  frontend:
+    profiles:
+      - full
